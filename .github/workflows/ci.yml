@@ -69,7 +69,7 @@ jobs:
         with:
           channels: |-
             (list (channel                                                      
-	            (name 'guix)                                               
+                    (name 'guix)                                               
                     (url "https://git.savannah.gnu.org/git/guix.git")       
                     (branch #f)                                            
                     (commit                                               
