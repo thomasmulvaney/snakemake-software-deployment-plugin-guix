@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  PYTHON_VERSION: 3.11
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install poetry
+        run: pip install poetry
+
+      - name: Determine dependencies
+        run: poetry lock
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: poetry
+
+      - name: Install Dependencies using Poetry
+        run: poetry install
+
+      - name: Check formatting
+        run: poetry run ruff format --check .
+
+      - name: Lint
+        run: poetry run ruff check .
+
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install poetry
+        run: pip install poetry
+
+      - name: Determine dependencies
+        run: poetry lock
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Setup Guix
+        id: install-guix
+        uses: PromyLOPh/guix-install-action@v1
+        with:
+          channels: |-
+            (list (channel                                                      
+	            (name 'guix)                                               
+                    (url "https://git.savannah.gnu.org/git/guix.git")       
+                    (branch #f)                                            
+                    (commit                                               
+                      "8e2f32cee982d42a79e53fc1e9aa7b8ff0514714")        
+                    (introduction                                       
+                      (make-channel-introduction                       
+                        "9edb3f66fd807b096b48283debdcddccfea34bad"    
+                        (openpgp-fingerprint                         
+                          "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
+
+      - name: Run pytest
+        run: |
+          poetry run coverage run -m pytest
+
+      - name: Run Coverage
+        run: poetry run coverage report -m
