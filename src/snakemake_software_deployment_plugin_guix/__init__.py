@@ -27,8 +27,7 @@ class EnvSpec(EnvSpecBase):
     channels: Optional[Path] = None
 
     def identity_attributes(self) -> Iterable[str]:
-        yield "manifest"
-        yield "channel"
+        ["manifest", "channels"]
 
     def source_path_attributes(self) -> Iterable[str]:
         # no paths involved here
@@ -53,18 +52,19 @@ class Env(EnvBase):
         # Then we spawn a shell with the set of packages defined in manifest.
         # There are some additional settings for the shell we may wish users to
         # be able to tune, like running in a isolated container.
-        return f"guix time-machine --channels {self.spec.channels} -- shell -m {self.spec.manifest} -- {cmd}"
+        return f"guix time-machine --channels={self.spec.channels} -- shell -m {self.spec.manifest} -- {cmd}"
 
     def record_hash(self, hash_object) -> None:
         # We should really pretty print these in case their formatting changes
         # before reading them in or use a scheme parser.
+        # Or there maybe a useful Guix command for returning something.
         with open(self.spec.channels) as channels_file:
             hash_object.update(channels_file.read())
 
-        with open(self.spec.channels) as manifest_file:
+        with open(self.spec.manifest) as manifest_file:
             hash_object.update(manifest_file.read())
 
+
     def report_software(self) -> Iterable[SoftwareReport]:
-        # An environment module is just a name, so we cannot report any software here?
-        # TODO, maybe there is some way to get software from the module?
+        # TODO: Figure out best way to report software
         return ()

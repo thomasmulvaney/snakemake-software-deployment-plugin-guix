@@ -1,0 +1,26 @@
+[project]
+name = "snakemake-software-deployment-plugin-guix"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.11,<4.0"
+dependencies = ["snakemake-interface-software-deployment-plugins >=0.6.1,<1.0.0"]
+repository = "https://github.com/thomasmulvaney/snakemake-software-deployment-plugin-guix"
+documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/software-deployment/guix.html"
+[[project.authors]]
+name = "Thomas Mulvaney"
+email = "thomas.mulvaney@cssb-hamburg.de"
+
+[build-system]
+requires = [ "poetry-core>=2.0.0,<3.0.0",]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+[[tool.poetry.packages]]
+include = "snakemake_software_deployment_plugin_guix"
+from = "src"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.6.12"
+pytest = "^8.3.5"
+ruff = "^0.9.9"

@@ -9,7 +9,7 @@ from snakemake_interface_software_deployment_plugins.settings import (
     SoftwareDeploymentSettingsBase,
 )
 
-from snakemake_software_deployment_plugin_nix import Env, EnvSpec, EnvSpecBase
+from snakemake_software_deployment_plugin_guix import Env, EnvSpec, EnvSpecBase
 
 
 class TestSoftwareDeployment(TestSoftwareDeploymentBase):
@@ -17,9 +17,9 @@ class TestSoftwareDeployment(TestSoftwareDeploymentBase):
 
     def get_env_spec(self) -> EnvSpecBase:
         return EnvSpec(
-			channels=Path(__file__).parent / "guix/channels.scm"
-			manifest=Path(__file__).parent / "guix/manifest.scm"
-		      )
+            channels=Path(__file__).parent / "guix/channels.scm",
+            manifest=Path(__file__).parent / "guix/manifest.scm",
+        )
 
     def get_software_deployment_provider_settings(
         self,
