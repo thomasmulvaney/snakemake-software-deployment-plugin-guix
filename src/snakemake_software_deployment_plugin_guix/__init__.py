@@ -27,7 +27,7 @@ class EnvSpec(EnvSpecBase):
     channels: Optional[Path] = None
 
     def identity_attributes(self) -> Iterable[str]:
-        ["manifest", "channels"]
+        return ["manifest", "channels"]
 
     def source_path_attributes(self) -> Iterable[str]:
         # no paths involved here
@@ -63,7 +63,6 @@ class Env(EnvBase):
 
         with open(self.spec.manifest) as manifest_file:
             hash_object.update(manifest_file.read())
-
 
     def report_software(self) -> Iterable[SoftwareReport]:
         # TODO: Figure out best way to report software
